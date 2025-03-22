@@ -224,23 +224,56 @@
                            class="shadow border rounded w-full py-2 px-3 text-gray-700" />
                 </div>
 
-                <!-- Submit -->
+                <!-- Inline "Add Ball Action" Button (visible on md+ screens) -->
                 <div>
-                    <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                    <button type="submit"
+                            class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded
+                                   hidden sm:inline-block">
                         Add Ball Action
                     </button>
                 </div>
             </form>
 
-            <!-- Undo Last Ball -->
+            <!-- Undo Last Ball Form (inline for md+ screens) -->
             <form asp-controller="Cricket"
                   asp-action="UndoLastBall"
                   method="post"
                   class="inline-block mb-4">
-                <button type="submit" class="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded">
+                <button type="submit"
+                        class="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded
+                               hidden sm:inline-block">
                     Undo Last Ball
                 </button>
             </form>
+
+            <!-- Floating Round Buttons (mobile only) -->
+            <!--
+                On small screens (<640px), display these fixed at bottom-right.
+                On larger screens, hide them (sm:hidden).
+            -->
+            <div class="sm:hidden fixed bottom-4 right-4 flex flex-col space-y-3 z-50">
+                <!-- Floating Add Ball Button: triggers the main #ballForm submission -->
+                <button type="button"
+                        class="w-12 h-12 rounded-full bg-blue-600 hover:bg-blue-700
+                               text-white font-bold flex items-center justify-center shadow-lg"
+                        onclick="document.getElementById('ballForm').submit();"
+                        title="Add Ball Action">
+                    +
+                    <!-- or use an icon if desired -->
+                </button>
+
+                <!-- Floating Undo Button: a tiny form for UndoLastBall -->
+                <form asp-controller="Cricket"
+                      asp-action="UndoLastBall"
+                      method="post">
+                    <button type="submit"
+                            class="w-12 h-12 rounded-full bg-red-500 hover:bg-red-600
+                                   text-white font-bold flex items-center justify-center shadow-lg"
+                            title="Undo Last Ball">
+                        ↩
+                    </button>
+                </form>
+            </div>
 
             <!-- Ball-by-Ball Log -->
             <h3 class="text-xl font-bold mt-6 mb-2">Ball-by-Ball Log (Table):</h3>
@@ -289,8 +322,7 @@
             @foreach (var overGroup in groupedByOver)
             {
                 if (overGroup.Key == 0) { continue; }
-                <!-- skip group 0 if desired -->
-                <!-- Calculate total runs in this over -->
+                // Calculate total runs in this over
                 var overRuns = overGroup.Sum(a => a.Runs + a.ExtraRuns + a.OverthrowRuns);
 
                 <div class="mb-4">
@@ -320,11 +352,10 @@
         let oldButtonElement = null;
 
         function selectOption(value, hiddenFieldId, groupId, btnElement) {
-
-            // Set hidden field value.
+            // Set hidden field value
             document.getElementById(hiddenFieldId).value = value;
 
-            // Remove highlight from all buttons in this group.
+            // Remove highlight from all buttons in this group
             const groupContainer = document.getElementById(groupId);
             if (groupContainer) {
                 const buttons = groupContainer.querySelectorAll("button");
@@ -333,9 +364,9 @@
                 });
             }
 
-            // Highlight the clicked button.
+            // Highlight the clicked button
             if (btnElement) {
-                if(btnElement == oldButtonElement) {
+                if (btnElement === oldButtonElement) {
                     btnElement.classList.remove("ring", "ring-offset-2", "ring-indigo-500");
                     oldButtonElement = null;
                 } else {
