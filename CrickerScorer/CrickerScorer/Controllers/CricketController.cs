@@ -16,19 +16,19 @@ namespace CrickerScorer.Controllers
         }
 
         // GET: /Cricket/Index
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
             // Pass the total score via ViewBag and the ball log as the model.
-            ViewBag.TotalScore = _cricketService.TotalScore;
-            ViewBag.Overs = _cricketService.OversString;
-            ViewBag.Wickets = _cricketService.WicketCount;
+            ViewBag.TotalScore = await _cricketService.GetTotalScoreAsync();
+            ViewBag.Overs = await _cricketService.GetOversStringAsync();
+            ViewBag.Wickets = await _cricketService.GetWicketCountAsync();
 
-            return View(_cricketService.BallActions);
+            return View(await _cricketService.GetAllBallActionsAsync());
         }
 
         // POST: /Cricket/AddBallAction
         [HttpPost]
-        public IActionResult AddBallAction(int runs, int extraRuns, int overthrowRuns, string commentary, BallType ballType, WicketType wicket)
+        public async Task<IActionResult> AddBallAction(int runs, int extraRuns, int overthrowRuns, string commentary, BallType ballType, WicketType wicket)
         {
             var ballAction = new BallAction
             {
@@ -38,16 +38,16 @@ namespace CrickerScorer.Controllers
                 Commentary = commentary,
                 BallType = ballType,
                 Wicket = wicket,
-                Timestamp = DateTime.Now
+                Timestamp = DateTime.UtcNow
             };
 
-            _cricketService.AddBallAction(ballAction);
+            await _cricketService.AddBallActionAsync(ballAction);
             return RedirectToAction("Index");
         }
         [HttpPost]
-        public IActionResult UndoLastBall()
+        public async Task<IActionResult> UndoLastBall()
         {
-            _cricketService.UndoLastBall();
+            await _cricketService.UndoLastBallAsync();
             return RedirectToAction("Index");
         }
     }

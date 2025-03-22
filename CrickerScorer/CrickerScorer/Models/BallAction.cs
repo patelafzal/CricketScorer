@@ -4,6 +4,7 @@ namespace CrickerScorer.Models
 {
     public class BallAction
     {
+        public int Id { get; set; }
         // Sequential delivery count (increments on every ball attempted)
         public int DeliveryNumber { get; set; }
 
