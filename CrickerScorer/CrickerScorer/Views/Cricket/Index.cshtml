@@ -317,7 +317,10 @@
          * hiddenFieldId: e.g., "runs", "ballType", "wicketType"
          * groupId: e.g., "runsButtons", "ballTypeButtons", "wicketTypeButtons"
          */
+        let oldButtonElement = null;
+
         function selectOption(value, hiddenFieldId, groupId, btnElement) {
+
             // Set hidden field value.
             document.getElementById(hiddenFieldId).value = value;
 
@@ -332,7 +335,13 @@
 
             // Highlight the clicked button.
             if (btnElement) {
-                btnElement.classList.add("ring", "ring-offset-2", "ring-indigo-500");
+                if(btnElement == oldButtonElement) {
+                    btnElement.classList.remove("ring", "ring-offset-2", "ring-indigo-500");
+                    oldButtonElement = null;
+                } else {
+                    btnElement.classList.add("ring", "ring-offset-2", "ring-indigo-500");
+                    oldButtonElement = btnElement;
+                }
             }
         }
     </script>
