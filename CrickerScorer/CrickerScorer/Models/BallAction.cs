@@ -21,6 +21,8 @@ namespace CrickerScorer.Models
 
         // Type of the ball delivery
         public BallType BallType { get; set; }
+
+        // Type of the Wicket 
         public WicketType Wicket { get; set; } = WicketType.None;
 
         // Optional commentary
